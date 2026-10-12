@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../animation.dart';
 import '../models/user_data.dart';
 import 'login_page.dart';
 
@@ -134,95 +135,25 @@ class _ProfilePageState extends State<ProfilePage> {
 
             const SizedBox(height: 20),
 
-            // Expanded Practice Section
-            SizedBox(
-              height: 500,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      color: Colors.blue,
-                      child: const Center(
-                        child: Text(
-                          'Hello',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      color: Colors.green,
-                      child: const Center(
-                        child: Text(
-                          'Hellow',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      color: Colors.deepOrangeAccent,
-                      child: const Center(
-                        child: Text(
-                          'Hellow',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      color: Colors.purple,
-                      child: const Center(
-                        child: Text(
-                          'Hellow',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
             const SizedBox(height: 20),
 
-            // ListView.builder Section
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 10,
+              itemCount: 5,
               itemBuilder: (context, index) {
+                final studentNumber = index + 1;
+
                 return ListTile(
-                  leading: CircleAvatar(child: Text('$index')),
-                  title: Text('Student $index'),
-                  subtitle: Text('This is student number $index'),
+                  leading: CircleAvatar(child: Text('$studentNumber')),
+                  title: Text('Student $studentNumber'),
                 );
               },
             ),
+
+            const SizedBox(height: 24),
+
+            const AnimatedContainerWidget(),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'models/user_data.dart';
-import 'pages/login_page.dart';
+import 'pages/welcome_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'My Portfolio',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: LoginPage(
+      home: WelcomePage(
         account: _registeredAccount,
         onAccountCreated: _saveAccount,
         onAuthenticated: _markAuthenticated,
