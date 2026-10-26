@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/user_data.dart';
-import 'login_page.dart';
-
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({
-    super.key,
-    required this.account,
-    required this.onAccountCreated,
-    required this.onAuthenticated,
-  });
-
-  final LocalAccount? account;
-  final ValueChanged<LocalAccount> onAccountCreated;
-  final ValueChanged<LocalAccount> onAuthenticated;
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -40,15 +28,7 @@ class _WelcomePageState extends State<WelcomePage>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed && mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => LoginPage(
-              account: widget.account,
-              onAccountCreated: widget.onAccountCreated,
-              onAuthenticated: widget.onAuthenticated,
-            ),
-          ),
-        );
+        Navigator.of(context).pushReplacementNamed('/login');
       }
     });
 

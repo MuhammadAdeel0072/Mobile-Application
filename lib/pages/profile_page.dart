@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../animation.dart';
-import '../models/user_data.dart';
-import 'login_page.dart';
+
+class ProfileRouteArguments {
+  const ProfileRouteArguments({required this.userName, this.successMessage});
+
+  final String userName;
+  final String? successMessage;
+}
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({
-    super.key,
-    required this.account,
-    required this.onLogout,
-    required this.onAccountCreated,
-    required this.onAuthenticated,
-    this.successMessage,
-  });
+  const ProfilePage({super.key, required this.userName, this.successMessage});
 
-  final LocalAccount account;
-  final VoidCallback onLogout;
-  final ValueChanged<LocalAccount> onAccountCreated;
-  final ValueChanged<LocalAccount> onAuthenticated;
+  final String userName;
   final String? successMessage;
 
   @override
@@ -39,32 +34,22 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _logout() {
-    widget.onLogout();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => LoginPage(
-          account: widget.account,
-          onAccountCreated: widget.onAccountCreated,
-          onAuthenticated: widget.onAuthenticated,
-        ),
-      ),
-      (_) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Muhammad Adeel'),
+        title: Text('Welcome ${widget.userName}'),
         centerTitle: true,
         actions: [
           IconButton(
             tooltip: 'Logout',
-            onPressed: _logout,
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                (_) => false,
+              );
+            },
             icon: const Icon(Icons.logout),
           ),
         ],

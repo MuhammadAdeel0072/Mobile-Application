@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../models/user_data.dart';
+import 'admin_page.dart';
 import 'profile_page.dart';
-import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -38,13 +38,26 @@ class _LoginPageState extends State<LoginPage> {
   void _login() {
     if (!_formKey.currentState!.validate()) return;
 
-    final account = widget.account;
-
     final email = _emailController.text.trim().toLowerCase();
+    final password = _passwordController.text;
+    LocalAccount? authenticatedAccount;
 
-    if (account == null ||
-        account.email != email ||
-        account.password != _passwordController.text) {
+    for (final account in demoAccounts) {
+      if (account.email == email && account.password == password) {
+        authenticatedAccount = account;
+        break;
+      }
+    }
+
+    final registeredAccount = widget.account;
+    if (authenticatedAccount == null &&
+        registeredAccount != null &&
+        registeredAccount.email == email &&
+        registeredAccount.password == password) {
+      authenticatedAccount = registeredAccount;
+    }
+
+    if (authenticatedAccount == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Incorrect email or password.')),
       );
@@ -52,36 +65,27 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    final account = authenticatedAccount;
     widget.onAuthenticated(account);
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProfilePage(
-          account: account,
-          onLogout: _handleLogout,
-          onAccountCreated: widget.onAccountCreated,
-          onAuthenticated: widget.onAuthenticated,
-        ),
-      ),
-      (_) => false,
-    );
-  }
+    if (account.role == AccountRole.admin) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => AdminPage(account: account)),
+        (_) => false,
+      );
+      return;
+    }
 
-  void _handleLogout() {
-    // Login route is created after the profile route is removed.
+    Navigator.pushNamed(
+      context,
+      '/profile',
+      arguments: ProfileRouteArguments(userName: account.name),
+    );
   }
 
   void _openSignUp() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => SignUpPage(
-          onAccountCreated: widget.onAccountCreated,
-          onAuthenticated: widget.onAuthenticated,
-        ),
-      ),
-    );
+    Navigator.pushNamed(context, '/signup');
   }
 
   @override

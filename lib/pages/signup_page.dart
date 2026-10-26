@@ -51,18 +51,14 @@ class _SignUpPageState extends State<SignUpPage> {
     widget.onAccountCreated(account);
     widget.onAuthenticated(account);
 
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) => ProfilePage(
-          account: account,
-          onLogout: () {},
-          onAccountCreated: widget.onAccountCreated,
-          onAuthenticated: widget.onAuthenticated,
-          successMessage: 'Account created successfully.',
-        ),
-      ),
+      '/profile',
       (_) => false,
+      arguments: ProfileRouteArguments(
+        userName: account.name,
+        successMessage: 'Account created successfully.',
+      ),
     );
   }
 

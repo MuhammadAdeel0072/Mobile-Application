@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'models/user_data.dart';
+import 'pages/login_page.dart';
+import 'pages/profile_page.dart';
+import 'pages/signup_page.dart';
 import 'pages/welcome_page.dart';
 
 void main() {
@@ -48,11 +51,31 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'My Portfolio',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: WelcomePage(
-        account: _registeredAccount,
-        onAccountCreated: _saveAccount,
-        onAuthenticated: _markAuthenticated,
-      ),
+      home: const WelcomePage(),
+      routes: {
+        '/login': (_) => LoginPage(
+          account: _registeredAccount,
+          onAccountCreated: _saveAccount,
+          onAuthenticated: _markAuthenticated,
+        ),
+        '/signup': (_) => SignUpPage(
+          onAccountCreated: _saveAccount,
+          onAuthenticated: _markAuthenticated,
+        ),
+        '/profile': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments;
+          if (arguments is! ProfileRouteArguments) {
+            throw FlutterError(
+              'The /profile route requires ProfileRouteArguments.',
+            );
+          }
+
+          return ProfilePage(
+            userName: arguments.userName,
+            successMessage: arguments.successMessage,
+          );
+        },
+      },
     );
   }
 }
