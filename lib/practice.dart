@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/splashScreen.dart';
+import 'package:my_app/listScreen.dart';
+import 'package:my_app/aboutScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,24 +13,86 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Portfolio',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MyHomePage(),
+      home: SplashScreen(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  void openPage(BuildContext context, Widget page) {
+    Navigator.pop(context);
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Muhammad Adeel'), centerTitle: true),
 
+      // DRAWER SECTION
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text("Muhammad Adeel"),
+              accountEmail: Text("BS Software Engineering"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('assets/Adeel-real.png'),
+              ),
+            ),
+
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text("Home"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Profile"),
+              onTap: () {
+                openPage(context, SimplePage(title: "Profile"));
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.folder),
+              title: Text("Projects"),
+              onTap: () {
+                openPage(context, ListScreen());
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.code),
+              title: Text("About"),
+              onTap: () {
+                openPage(context, AboutScreen());
+              },
+            ),
+
+            Divider(),
+
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Settings"),
+              onTap: () {
+                openPage(context, SimplePage(title: "Settings"));
+              },
+            ),
+          ],
+        ),
+      ),
+
+      // BODY SECTION
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // -------------------------------
-            // Portfolio Section
-            // -------------------------------
-
+            // PORTFOLIO SECTION
             Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -88,9 +153,7 @@ class MyHomePage extends StatelessWidget {
 
             SizedBox(height: 20),
 
-            // -------------------------------
-            // Expanded Practice Section
-            // -------------------------------
+            // EXPANDED PRACTICE SECTION
             Container(
               height: 500,
               child: Column(
@@ -166,9 +229,7 @@ class MyHomePage extends StatelessWidget {
 
             SizedBox(height: 20),
 
-            // -------------------------------
-            // ListView.builder Section
-            // -------------------------------
+            // LISTVIEW.BUILDER SECTION
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -181,9 +242,60 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+
+            // CARD SECTION
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage('assets/Adeel-real.png'),
+                    ),
+                    title: Text("Muhammad Adeel"),
+                    subtitle: Text("BS Software Engineering"),
+                    trailing: Icon(Icons.person),
+                  ),
+
+                  Divider(),
+
+                  ListTile(
+                    leading: Icon(Icons.school),
+                    title: Text("Riphah International University"),
+                    subtitle: Text("5th Semester"),
+                  ),
+
+                  Divider(),
+
+                  ListTile(
+                    leading: Icon(Icons.code),
+                    title: Text("Flutter Development"),
+                    subtitle: Text("Mobile App Development"),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SimplePage extends StatelessWidget {
+  final String title;
+
+  const SimplePage({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(child: Text("$title Page", style: TextStyle(fontSize: 24))),
     );
   }
 }
