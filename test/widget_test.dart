@@ -8,23 +8,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:my_app/screens/dashboard_screen.dart';
 import 'package:my_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('auth screens show DevFlow branding and navigate', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await tester.pumpWidget(const MyApp());
+    expect(find.text('DevFlow'), findsOneWidget);
+    expect(find.text('Welcome Back, Adeel'), findsOneWidget);
+    expect(find.text('Sign In'), findsOneWidget);
+    expect(find.text('Continue with Google'), findsOneWidget);
+    expect(find.text('Continue with Apple'), findsOneWidget);
+    expect(tester.takeException(), isNull);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.ensureVisible(find.text('Sign Up'));
+    await tester.tap(find.text('Sign Up'));
+    await tester.pumpAndSettle();
+    expect(find.text('DevFlow'), findsOneWidget);
+    expect(find.text('Create Account'), findsNWidgets(2));
+    expect(find.text('Full Name'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('dashboard displays the personalized profile and sample stats', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpAndSettle();
+    expect(find.text('DevFlow'), findsOneWidget);
+    expect(find.text('Adeel'), findsOneWidget);
+    expect(find.text('Muhammad Adeel  ·  5th Semester'), findsOneWidget);
+    expect(
+      find.text('Riphah International University, Islamabad'),
+      findsOneWidget,
+    );
+    expect(find.text('3.87'), findsOneWidget);
+    expect(find.text('12'), findsOneWidget);
+    expect(find.text('28'), findsOneWidget);
+    expect(find.text('My Skills'), findsOneWidget);
+    expect(
+      find.text('Project and task figures are sample values, not live data.'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
   });
 }
